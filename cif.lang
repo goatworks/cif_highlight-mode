@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ This file is made according to the GtkSourceView standard.
+ Hence, should be gedit-compatible.
+ 
+ Just copy this file in the 
+ '~/.local/share/gtksourceview-4/language-specs' folder 
+ (create the directory if it doesn't exist yet) and restart gedit in order for 
+ it to notice the addition.
+ 
+ Forked by: none
+ - Fork Mantainer: Lucia Allara - lucia <dot> allara <at> gmail <dot> com
+ Editors:
+ - Lucia Allara - lucia.allara <at> gmail <dot> com
+ 
+ Licence: this file is beerware.
+ That pactically means:
+  - Do what you want. 
+  - If you want to make money, ask Fork Mantainer.
+  - If you fork, keep the licence, become the new fork mantainer and flag the current one into "Forked by".
+  - If we meet, you own me a beer.
+-->
+
+<language id="cif" name="CIF" _section="Scientific" version="2.0">
+
+  <metadata>
+    <property name="globs">*.cif</property>
+  	<property name="mimetypes">text/x-cif</property>
+  	<property name="line-comment-start">#</property>
+  </metadata>
+
+  <styles>
+  	<!-- Note: "map-to" here is done only on a highlight typology basis (as in, obviously numbers 
+  	are nor identifiers, but I want them differentiated fron strings) -->
+    <style id="string" 			name="String" 					map-to="def:string"/>
+    <style id="xyz-positions" 	name="Atoms_xyz_Positions" 		map-to="def:never-match"/>
+    <style id="variable" 		name="Variable" 				map-to="def:type"/>
+    <style id="identifier" 		name="Atom_Identifier" 			map-to="def:preprocessor"/>
+    <style id="number" 			name="Number" 					map-to="def:identifier"/>
+    <style id="separator" 		name="Separator" 				map-to="def:keyword"/>
+  </styles>
+
+  <definitions>
+    
+	<!-- strings are surrounded by the ; symbol -->
+	<context id="string" style-ref="string" end-at-line-end="false" class-disabled="no-spell-check">
+	  <start>;</start>
+	  <end>;</end>
+	</context>
+	
+	<!-- atoms positions are surrounded by either ' or " character: we don't want any of 
+	the other highlighting options to apply here -->
+	<context id="xyz-positions" style-ref="xyz-positions" end-at-line-end="true">
+	  <start>('|")</start>
+	  <end>('|")</end>
+	</context>
+	
+	<!-- variables are all the definitions that start with _ -->
+	<context id="variable" style-ref="variable">
+	  <match>^_[\w\d._-]+</match>
+	</context>
+	
+	<!-- finds thing like Cs1-, Sn4+, I1+, etc. -->
+	<context id="identifier" style-ref="identifier">
+	  <match>[A-Z]{1}[a-z]?[\d]+[+-]{1}</match>
+	</context>
+	
+	<!-- finds number, integers and floats -->
+	<context id="number" style-ref="number">
+	  <match>\b-?\d+\.?\d*\b</match>
+	</context>
+	
+	<!-- finds the "loop_" separator, for improved redability -->
+	<context id="separator" style-ref="separator">
+	  <match>.*_$</match>
+	</context>
+
+    <!-- just a dummy context, needed to load the style mappings when parsing v1 files -->
+    <context id="cif">
+      <include>
+        <context ref="def:shell-like-comment"/>
+        <context ref="string"/>
+        <context ref="xyz-positions"/>
+        <context ref="variable"/>
+        <context ref="identifier"/>
+        <context ref="number"/>
+        <context ref="separator"/>
+      </include>
+    </context>
+    
+  </definitions>
+  
+</language>
+
