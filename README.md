@@ -11,5 +11,5 @@ and structure definition sciences (chemistry and physics disciplines).
 
 ## Usage ##
 Just place this file in the '~/.local/share/gtksourceview-4/language-specs' folder 
-(create the directory if it doesn't exist yet) and restart gedit in order for it to 
+(create the directory if it doesn't yet exist) and restart gedit in order for it to 
 notice the addition.
