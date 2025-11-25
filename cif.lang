@@ -32,16 +32,22 @@
 
   <styles>
   	<!-- Note: "map-to" here is done only on a highlight typology basis (as in, obviously numbers 
-  	are nor identifiers, but I want them differentiated fron strings) -->
+  	are not identifiers, but I want them differentiated from strings) -->
+  	<style id="db_code"         name="DB_code"                  map-to="def:string"/>
     <style id="string" 			name="String" 					map-to="def:string"/>
     <style id="xyz-positions" 	name="Atoms_xyz_Positions" 		map-to="def:never-match"/>
-    <style id="variable" 		name="Variable" 				map-to="def:type"/>
-    <style id="identifier" 		name="Atom_Identifier" 			map-to="def:preprocessor"/>
+    <style id="variable" 		name="Variable" 				map-to="def:preprocessor"/>
+    <style id="identifier" 		name="Atom_Identifier" 			map-to="def:type"/>
     <style id="number" 			name="Number" 					map-to="def:identifier"/>
     <style id="separator" 		name="Separator" 				map-to="def:keyword"/>
   </styles>
 
   <definitions>
+
+	<!-- the databse identifier of the deposited structure starts with "data"  -->
+    <context id="db_code" style-ref="db_code">
+      <match>^data[\w.-]*$</match>
+    </context>
     
 	<!-- strings are surrounded by the ; symbol -->
 	<context id="string" style-ref="string" end-at-line-end="false" class-disabled="no-spell-check">
@@ -68,7 +74,7 @@
 	
 	<!-- finds number, integers and floats -->
 	<context id="number" style-ref="number">
-	  <match>\b-?\d+\.?\d*\b</match>
+	  <match>\b-?\d+\.?\d*</match>
 	</context>
 	
 	<!-- finds the "loop_" separator, for improved redability -->
@@ -80,6 +86,7 @@
     <context id="cif">
       <include>
         <context ref="def:shell-like-comment"/>
+        <context ref="db_code"/>
         <context ref="string"/>
         <context ref="xyz-positions"/>
         <context ref="variable"/>
